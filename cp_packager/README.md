@@ -1,5 +1,12 @@
 # Coyote Papers packager tool
 
+- [Coyote Papers packager tool](#coyote-papers-packager-tool)
+  - [About](#about)
+  - [Overview](#overview)
+  - [Changelog](#changelog)
+  - [Author](#author)
+  - [Contributors](#contributors)
+
 ## About
 
 This code was originally created by me for my editing needs as part of the University of Arizona [Coyote Papers](https://coyotepapers.sbs.arizona.edu/) editorial team. The code is referenced in the [*Coyote Papers Proceedings* OSF project](https://osf.io/xk2n6/) and its private OSF projects.
@@ -38,9 +45,9 @@ To run the code you can either `git clone` this repository or you can [download 
 ## Changelog
 
 v0.1.0
-    * First GH release
-    * Used in the ALC 14 Proceedings
-    * Works on MacOS and Linux
+* First GH release
+* Used in the ALC 14 Proceedings
+* Works on MacOS and Linux
 
 ## Author
 
