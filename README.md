@@ -1,5 +1,7 @@
 # Damian's Code
 
+![Top Language](https://img.shields.io/github/languages/top/damian-romero/damians_code?style=for-the-badge) ![Release](https://img.shields.io/github/v/release/damian-romero/damians_code?style=for-the-badge) ![License](https://img.shields.io/github/license/damian-romero/damians_code?color=blue&style=for-the-badge)
+
 - [Damian's Code](#damians-code)
   - [About](#about)
   - [Contents](#contents)
