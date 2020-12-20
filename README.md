@@ -24,5 +24,8 @@ A Python module used to facilitate the editorial work of the [Coyote Papers](htt
 
 Please notice that the versions of the main repository may not coincide with the versions of the projects contained within.
 
+v0.2.0
+* Add GitHub issue templates ported from [ReQUIAM repo](https://github.com/ualibraries/ReQUIAM)
+
 v0.1.0
 * First GH release for Coyote Papers Packager
