@@ -27,8 +27,10 @@ A Python module used to facilitate the editorial work of the [Coyote Papers](htt
 Please notice that the versions of the main repository may not coincide with the versions of the projects contained within.
 
 v0.2.0
-* Add GitHub action for creating release in main branch
-* Add GitHub issue templates ported from [ReQUIAM repo](https://github.com/ualibraries/ReQUIAM)
+* Add Jupyter Notebook walkthrough for CP Packager tool #8
+* Add GitHub action for creating releases in main branch #11
+* Add GitHub issue templates ported from [ReQUIAM repo](https://github.com/ualibraries/ReQUIAM) #11 #7
+* Add badges to README.md #11
 
 v0.1.0
 * First GH release for Coyote Papers Packager
