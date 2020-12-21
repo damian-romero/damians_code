@@ -42,15 +42,17 @@ To run the code you can either `git clone` this repository or you can [download 
         └── cp_packager.py                  # Run the script from here
 ```
 
+If you need a detailed guide on how to run the Coyote Papers Packager tool, you can consult this [Jupyter Notebook](https://github.com/damian-romero/damians_code/blob/develop/cp_packager/CP%20Packager%20Walkthrough.ipynb).
+
 ## Changelog
+
+v0.2.0
+* Add Jupyter Notebook walkthrough
 
 v0.1.0
 * First GH release
 * Used in the ALC 14 Proceedings
 * Works on MacOS and Linux
-
-v0.2.0
-* Add Jupyter Notebook walkthrough
 
 ## Author
 
