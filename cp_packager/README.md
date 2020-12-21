@@ -15,7 +15,7 @@ If the code needs refactoring or if you find a bug, please [start a new issue](h
 
 ## Overview
 
-The code in this repository automatically creates directory (folder) packages with all the necessary files for article reviewers. Those folders are then placed either in an online storage platform usually an [OSF private project](https://osf.io/) where reviewers can be given editing access so that they can view the articles they must review and upload their reviews according to the instructions.
+The code in this repository automatically creates directory (folder) packages with all the necessary files for article reviewers. The editorial team (typically the person holding the `Digital Archivist` role) must upload these directories in an online storage platform, (usually an [OSF private project](https://osf.io/)) where reviewers can be given editing access so that they can view the articles they must review and upload their reviews according to the instructions.
 
 Note that all files here are sample files. To actually run the program you must download it to your computer and replace the files with the most up-to-date versions in [*Coyote Papers Proceedings* OSF project](https://osf.io/xk2n6/).
 
@@ -49,9 +49,12 @@ v0.1.0
 * Used in the ALC 14 Proceedings
 * Works on MacOS and Linux
 
+v0.2.0
+* Add Jupyter Notebook walkthrough
+
 ## Author
 
-Damian Romero (@damian-romero)
+Damian Romero ([@damian-romero](https://github.com/damian-romero))
 
 ## Contributors
 
