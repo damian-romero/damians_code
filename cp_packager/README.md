@@ -15,7 +15,7 @@ If the code needs refactoring or if you find a bug, please [start a new issue](h
 
 ## Overview
 
-The code in this repository automatically creates directory (folder) packages with all the necessary files for article reviewers. Those folders are then placed either in an online storage platform usually an [OSF private project](https://osf.io/) where reviewers can be given editing access so that they can view the articles they must review and upload their reviews according to the instructions.
+The code in this repository automatically creates directory (folder) packages with all the necessary files for article reviewers. The editorial team (typically the person holding the `Digital Archivist` role) must upload these directories in an online storage platform, (usually an [OSF private project](https://osf.io/)) where reviewers can be given editing access so that they can view the articles they must review and upload their reviews according to the instructions.
 
 Note that all files here are sample files. To actually run the program you must download it to your computer and replace the files with the most up-to-date versions in [*Coyote Papers Proceedings* OSF project](https://osf.io/xk2n6/).
 
@@ -42,7 +42,12 @@ To run the code you can either `git clone` this repository or you can [download 
         └── cp_packager.py                  # Run the script from here
 ```
 
+If you need a detailed guide on how to run the Coyote Papers Packager tool, you can consult this [Jupyter Notebook](https://github.com/damian-romero/damians_code/blob/develop/cp_packager/CP%20Packager%20Walkthrough.ipynb).
+
 ## Changelog
+
+v0.2.0
+* Add Jupyter Notebook walkthrough
 
 v0.1.0
 * First GH release
@@ -51,7 +56,7 @@ v0.1.0
 
 ## Author
 
-Damian Romero (@damian-romero)
+Damian Romero ([@damian-romero](https://github.com/damian-romero))
 
 ## Contributors
 

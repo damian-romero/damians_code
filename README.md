@@ -1,5 +1,7 @@
 # Damian's Code
 
+![Top Language](https://img.shields.io/github/languages/top/damian-romero/damians_code?style=for-the-badge) ![Release](https://img.shields.io/github/v/release/damian-romero/damians_code?style=for-the-badge) ![License](https://img.shields.io/github/license/damian-romero/damians_code?color=blue&style=for-the-badge)
+
 - [Damian's Code](#damians-code)
   - [About](#about)
   - [Contents](#contents)
@@ -23,6 +25,12 @@ A Python module used to facilitate the editorial work of the [Coyote Papers](htt
 ## Versioning
 
 Please notice that the versions of the main repository may not coincide with the versions of the projects contained within.
+
+v0.2.0
+* Add Jupyter Notebook walkthrough for CP Packager tool #8
+* Add GitHub action for creating releases in main branch #11
+* Add GitHub issue templates ported from [ReQUIAM repo](https://github.com/ualibraries/ReQUIAM) #11 #7
+* Add badges to README.md #11
 
 v0.1.0
 * First GH release for Coyote Papers Packager
