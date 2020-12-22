@@ -11,30 +11,29 @@ Last tested on Python 3.8.5
 
 This program was ported to Python for sustainability purposes.
 
-TODO: 
-    #1 use os module to find full paths for any given system
+TODO:
     #2 use .gitignore files or a .deldefault file to remove unwanted files
 """
 
 import argparse
 from csv import DictReader
-import os
+from pathlib import Path
 import shutil
 import sys
 
 
-def file_exception_handler(fpath: str, dryrun: bool):
+def file_exception_handler(fpath: object, dryrun: bool):
     """Check files needed to create dirs. All file errors are fatal."""
     if not dryrun:
-        if os.path.exists(fpath):
-            print(f"*** Your file {fpath} is being procesed ***")
+        if fpath.exists():
+            print(f"*** Your file `{fpath.name}` is being procesed ***")
         else:
-            print(f"\n*** WARNING: FATAL ERROR. Your file `{fpath}` does not exist. ***")
-            print(f"*** Check that your file is correctly named and placed in the right folder and come back ***")
+            print(f"\n*** WARNING: FATAL ERROR. Your file `{fpath.name}` does not exist. ***")
+            print("*** Check that your file is correctly named and placed in the right folder and come back ***")
             sys.exit(1)
 
 
-def dir_exception_handler(dpath: str,
+def dir_exception_handler(dpath: object,
                           dryrun: bool,
                           dirs_created: list = [],
                           overwrite: bool = False) -> bool:
@@ -44,7 +43,7 @@ def dir_exception_handler(dpath: str,
     
     Parameters
     ----------
-        dpath
+        dpath: pathlib Path object
             The path to the directory that will be checked for creation
         dirs_created
             A list of paths of previously created directories during this session
@@ -57,25 +56,26 @@ def dir_exception_handler(dpath: str,
     # If this dir was created during this session, do not create it again
     if dpath in dirs_created:
         return False
-    elif os.path.exists(dpath):
+    elif dpath.exists():
         if dryrun == False:
             # Get user input
             while overwrite not in ['Y', 'y', 'N', 'n', True]:
-                overwrite = input(f"\n*** WARNING: Your directory {dpath} already exists. Overwrite? Y/N:  ")
+                overwrite = input(f"\n*** WARNING: Your directory `{dpath.name}` already exists. Overwrite? Y/N:  ")
             if overwrite == True or overwrite.lower() == 'y':
-                print(f"Your directory {dpath} will be overwritten")
-                shutil.rmtree(dpath)
+                print(f"Your directory `{dpath.name}` will be overwritten\n")
+                shutil.rmtree(dpath)  # shutil is necessary since path.rmdir() fails if dir is not empty
                 return True
             else:
+                print(f"Your directory `{dpath.name}` is safe\n")
                 return False
         else:  # If dry run:
             print(f"\n*** WARNING: This is a dry run but if you run cp_packager in normal mode,")
-            print(f"*** your directory {dpath} may be overwritten")
+            print(f"*** your directory `{dpath.name}` may be overwritten")
     else:
         return True
 
 
-def create_directory(dirpath: str, dryrun: bool):
+def create_directory(dirpath: object, dryrun: bool):
     """Handles the creation of directories for cp_packager
 
     Note
@@ -84,18 +84,18 @@ def create_directory(dirpath: str, dryrun: bool):
     
     Parameters
     ----------
-        dirpath
+        dirpath: pathlib Path object
             The path of the directory to be created
         dryrun
             A boolean indicating if the program should be fully run or run in dry mode 
     """
     if not dryrun:
         try:
-            os.mkdir(dirpath)
+            dirpath.mkdir()
         except FileExistsError as error:
             raise error
         else:
-            print(f"Creating new directory: {dirpath}")
+            print(f"Creating new directory: {dirpath.name}")
             return(dirpath)
 
 
@@ -110,9 +110,8 @@ def read_tsv(ifile: str, delim: str = '\t'):
 def make_package(dict_row: dict,
                  all_created_dirs: list,
                  content: list,
-                 content_path: str,
-                 papers_path: str,
-                 out_path: str,
+                 papers_path: object,
+                 out_path: object,
                  dry_run: bool = False,
                  force_create: bool = False) -> list:
     """Creates directories in `out_path` tailored for every reviewer
@@ -128,10 +127,10 @@ def make_package(dict_row: dict,
         all_created_dirs
             full list of created directories during this session
 
-        content
+        content: list of pathlib Path objects
             List of file paths of the common files to populate the new dirs
 
-        *_path
+        *_path: pathlib Path objects
             Necessary folder structure for cp_packager to work. Defined in main()
 
         dry_run
@@ -168,7 +167,7 @@ def make_package(dict_row: dict,
         # Tables are likely to contain extra spacing after content
         try:
             item = dict_row[k].strip()
-        except AttributeError as e:
+        except AttributeError:
             raise AttributeError('Your table is not formatted correctly. ' +
                                  'Check that the tabs and spacing are '
                                  'consistant and try again.')
@@ -179,16 +178,13 @@ def make_package(dict_row: dict,
         if index == 0:
             curr_paper = item
             # Works only if the paper is named exactly as it is on the table
-            file_exception_handler(papers_path + curr_paper, dry_run)
-            print('--------------------------')
-            print(f'Working on the paper: "{curr_paper}"')
-            print('--------------------------')
+            file_exception_handler(papers_path.joinpath(curr_paper), dry_run)
             continue
 
         # Look for existing reviewer names to create dirs
         # Dict reader returns NONE in columns with missing values
         if item:
-            newdir = out_path + item + '/'  # TODO #1
+            newdir = out_path.joinpath(item)
             # Does newdir need to be created?
             if dir_exception_handler(dpath= newdir,
                                      dryrun= dry_run,
@@ -196,57 +192,65 @@ def make_package(dict_row: dict,
                                      overwrite= force_create):
                 created_dir = create_directory(newdir, dry_run)
                 created_dirs_list.append(created_dir)
-                # print(created_dirs_list)
 
             if not dry_run:
                 # Copy the corresponding paper
-                shutil.copyfile(papers_path + curr_paper, newdir + curr_paper)
+                shutil.copyfile(papers_path.joinpath(curr_paper), newdir.joinpath(curr_paper))
                 # Copy all the common files
                 for f in content:
-                    shutil.copyfile(content_path + f, newdir + f)
+                    shutil.copyfile(f, newdir.joinpath(f.name))
     print()
     return created_dirs_list
 
 
-def main(table_path: str,
+def main(table_path: object,
+         content_path: object,
+         papers_path: object,
+         output_path: object,
          test: bool = False,
          force: bool = False,
-         content_path: str = '../content/',  # TODO #1
-         papers_path: str = '../papers/',  # TODO #1
-         out_path: str = '../output/'):  # TODO #1
+         ):
     """Main function for cp_packager.py
 
     Parameters
     ----------
-    table_path:
+    table_path: pathlib Path object
         Path to tsv with name of paper file and names of reviewers
+
+    content_path: pathlib Path object
+        The path to the content directory. Typically `../content/`
+
+    papers_path: pathlib Path object
+        The path to the papers directory. Typically `../papers/`
+
+    output_path: pathlib Path object
+        The path to the directory where reviewer subdirectories will be created.
+        Typically `../output/`. If it doesn't exist this function will create it.
 
     test:
         Dry run flag
 
-    content_path:
-        The path to the content directory. Typically `../content/`
-
-    papers_path:
-        The path to the papers directory. Typically `../papers/`
-
-    out_path:
-        The path to the directory where reviewer subdirectories will be created.
-        Typically `../output/`. If it doesn't exist this function will create it.
+    force:
+        Flag to bypass safe folder overwriting
     """
     all_created_dirs = []
 
-    # Check if `out_path` exists, otherwise, create it
-    if dir_exception_handler(dpath= out_path, dryrun= test, overwrite= force):
-        create_directory(out_path, test)
+    # Check if table exists
+    file_exception_handler(fpath= table_path, dryrun= test)
+
+    # Check if `output_path` exists, otherwise, create it
+    if dir_exception_handler(dpath= output_path, dryrun= test, overwrite= force):
+        create_directory(output_path, test)
 
     # Create dictionary generator from local tsv
     dict_gen = read_tsv(table_path)
 
     # Get file paths in `content_path`
-    content_list = os.listdir(content_path)
-    for f in content_list:
-        file_exception_handler(content_path + f, test)
+    content_list = []
+    for f in content_path.glob('*'):
+        print(f)
+        content_list.append(f)
+        file_exception_handler(f, test)
     print()
 
     # Main loop for creating and populating directories
@@ -260,9 +264,8 @@ def main(table_path: str,
         new_dirs= make_package(next_row,
                      all_created_dirs = all_created_dirs,
                      content= content_list,
-                     content_path= content_path,
                      papers_path= papers_path,
-                     out_path= out_path,
+                     out_path= output_path,
                      dry_run= test)
 
         for d in new_dirs:
@@ -289,19 +292,25 @@ if __name__ == "__main__":
 
     # Name of the tsv file and its folder. Modify as needed.
     table_file = 'Papers-and-reviewers.tsv'  # Contains paper file names and reviewer names
-    
+
     # Name of the directories to be used by cp_packager. Modify as-needed.
-    input_folder = '../input/'  # Contains tsv file. # TODO #1
-    content_folder = '../content/'  # Contains common files to be added to all packages # TODO #1
-    papers_folder = '../papers/'  # Contains articles (papers) to be added under specific reviewer names # TODO #1
-    output_folder = '../output/'  # Where packages will be created # TODO #1
+    input_folder = 'input'  # Contains tsv file.
+    content_folder = 'content'  # Contains common files to be added to all packages
+    papers_folder = 'papers'  # Contains articles (papers) to be added under specific reviewer names
+    output_folder = 'output'  # Where packages will be created
 
-    # Check if table exists
-    file_exception_handler(input_folder + table_file, args.test)
+    # Deal with directories placed in parent directory
+    parent_dir = Path.cwd().parent
 
-    main(table_path= input_folder + table_file,
+    input_path = parent_dir.joinpath(input_folder)
+    content_path = parent_dir.joinpath(content_folder)
+    paperst_path = parent_dir.joinpath(papers_folder)
+    output_path = parent_dir.joinpath(output_folder)
+    table_path = input_path.joinpath(table_file)
+
+    main(table_path= table_path,
          test= args.test,
          force= args.force,
-         content_path= content_folder,
-         papers_path= papers_folder,
-         out_path= output_folder)
+         content_path= content_path,
+         papers_path= paperst_path,
+         output_path= output_path)
